@@ -47,6 +47,18 @@ public class UserJPAUnitTest {
 	
 	}
 	
+	@Test
+	public void should_find_all_users() {
+		
+		User user1 = new User("TestFirstName1", "TestLastName1", "TestUserName1","TestEmail1", 11, "TestCountry1", "TestState1", "TestCity1", "TestPassword1");
+		User user2 = new User("TestFirstName2", "TestLastName2", "TestUserName2","TestEmail2", 22, "TestCountry2", "TestState2", "TestCity2", "TestPassword2");
+		User user3 = new User("TestFirstName3", "TestLastName3", "TestUserName3","TestEmail3", 33, "TestCountry3", "TestState3", "TestCity3", "TestPassword3");
+		
+		Iterable<User> users = repository.findAll();
+		
+		assertThat(users).contains(user1,user2,user3);
+	}
+	
 	
 	
 }
