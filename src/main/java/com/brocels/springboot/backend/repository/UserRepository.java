@@ -6,4 +6,5 @@ import com.brocels.springboot.backend.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+	User findByUserName(String userName);
 }

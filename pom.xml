@@ -14,7 +14,7 @@
 	<name>SpringBoot-REST-API</name>
 	<description>SpringBoot RestFul API tuto</description>
 	<properties>
-		<java.version>16</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
