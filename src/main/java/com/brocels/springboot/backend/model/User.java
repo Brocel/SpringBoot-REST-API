@@ -38,13 +38,16 @@ public class User {
     
     @Column(name = "city")
     private String city;
+    
+    @Column(name = "password")
+    private String password;
 
     public User() {
 
     }
 
 	public User(String firstName, String lastName, String userName, String email, int age, String country, String state,
-			String city) {
+			String city, String password) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -54,6 +57,7 @@ public class User {
 		this.country = country;
 		this.state = state;
 		this.city = city;
+		this.password = password;
 	}
 
 	public long getId() {
@@ -127,6 +131,13 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
-    
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
     
 }
