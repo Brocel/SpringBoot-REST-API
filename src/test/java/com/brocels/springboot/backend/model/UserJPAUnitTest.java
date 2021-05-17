@@ -59,6 +59,19 @@ public class UserJPAUnitTest {
 		assertThat(users).contains(user1,user2,user3);
 	}
 	
-	
-	
+	@Test
+	public void should_find_user_by_id() {
+		
+		User user1 = new User("TestFirstName1", "TestLastName1", "TestUserName1","TestEmail1", 11, "TestCountry1", "TestState1", "TestCity1", "TestPassword1");
+		User user2 = new User("TestFirstName2", "TestLastName2", "TestUserName2","TestEmail2", 22, "TestCountry2", "TestState2", "TestCity2", "TestPassword2");
+		
+		
+		entityManager.persist(user1);
+		entityManager.persist(user2);
+		
+		User foundUser = repository.findById(user2.getId()).get();
+		
+		assertThat(foundUser).isEqualTo(user2);
+		
+	}
 }
