@@ -2,7 +2,7 @@ package com.brocels.springboot.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -52,8 +52,11 @@ public class UserJPAUnitTest {
 	public void should_find_all_users() {
 		
 		User user1 = new User("TestFirstName1", "TestLastName1", "TestUserName1","TestEmail1@test.com", 11, "TestCountry1", "TestState1", "TestCity1", "TestPassword1");
+		entityManager.persist(user1);
 		User user2 = new User("TestFirstName2", "TestLastName2", "TestUserName2","TestEmail2@test.com", 22, "TestCountry2", "TestState2", "TestCity2", "TestPassword2");
+		entityManager.persist(user2);
 		User user3 = new User("TestFirstName3", "TestLastName3", "TestUserName3","TestEmail3@test.com", 33, "TestCountry3", "TestState3", "TestCity3", "TestPassword3");
+		entityManager.persist(user3);
 		
 		Iterable<User> users = repository.findAll();
 		
@@ -166,6 +169,26 @@ public class UserJPAUnitTest {
 		assertThat(checkUser.getUserName()).isEqualTo(updatedUser.getUserName());
 		assertThat(checkUser.getAge()).isEqualTo(updatedUser.getAge());
 		assertThat(checkUser.getEmail()).isEqualTo(updatedUser.getEmail());
+		
+	}
+	
+	@Test
+	public void should_delete_user_by_id() {
+		
+		User user1 = new User("TestFirstName1", "TestLastName1", "TestUserName1","TestEmail1@test.com", 11, "TestCountry1", "TestState1", "TestCity1", "TestPassword1");
+		entityManager.persist(user1);
+		
+		User user2 = new User("TestFirstName2", "TestLastName2", "TestUserName2","TestEmail2@test.com", 22, "TestCountry2", "TestState2", "TestCity2", "TestPassword2");
+		entityManager.persist(user2);
+		
+		User user3 = new User("TestFirstName3", "TestLastName3", "TestUserName3","TestEmail3@test.com", 33, "TestCountry2", "TestState2", "TestCity3", "TestPassword3");
+		entityManager.persist(user3);
+		
+		repository.deleteById(user2.getId());
+		
+		Iterable<User> users = repository.findAll();
+		
+		assertThat(users).hasSize(2).contains(user1, user3);
 		
 	}
 	
