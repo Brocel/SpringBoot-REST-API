@@ -28,7 +28,7 @@ public class UserController {
 	@GetMapping("users")
 	public List <User> getUsers(){
 		return this.userRepository.findAll();
-	}
+	} // ajouter response entity behaviour
 	
 	@PutMapping("users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
