@@ -36,6 +36,18 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping("users/{id}")
+	public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
+		Optional<User> userData = userRepository.findById(id);
+		
+		if(userData.isPresent()) {
+			User _user = userData.get();
+			return new ResponseEntity<>(_user, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 	@PutMapping("users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
 		Optional<User> userData = userRepository.findById(id);
