@@ -26,9 +26,15 @@ public class UserController {
 	private UserRepository userRepository;
 	
 	@GetMapping("users")
-	public List <User> getUsers(){
-		return this.userRepository.findAll();
-	} // ajouter response entity behaviour
+	public ResponseEntity<List <User>> getUsers(){
+		List<User> userList = userRepository.findAll();
+		
+		if(userList.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(userList, HttpStatus.OK);
+		}
+	}
 	
 	@PutMapping("users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
