@@ -7,6 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import javax.validation.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,12 +28,16 @@ public class User {
     private String lastName;
     
     @Column(name = "user_name")
+    @NotBlank
     private String userName;
     
     @Column(name = "email")
+    @NotBlank
+    @Email(message = "Email should be valid")
     private String email;
     
     @Column(name = "age")
+    @Min(value = 10, message = "Age shouldn't be under 10")
     private int age;
     
     @Column(name = "country")
@@ -40,6 +50,7 @@ public class User {
     private String city;
     
     @Column(name = "password")
+    @NotBlank
     private String password;
 
     public User() {
