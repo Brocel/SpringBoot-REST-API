@@ -24,9 +24,14 @@ public class JwtFilter extends OncePerRequestFilter{
     private CustomUserDetailsService service;
     
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		String authorizationHeader = httpServletRequest.getHeader("Authorization");
+		String token = null;
+        String userName = null;
+        
+        
 		
 	}
 
