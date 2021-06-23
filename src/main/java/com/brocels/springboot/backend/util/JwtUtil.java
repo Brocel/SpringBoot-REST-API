@@ -20,7 +20,7 @@ public class JwtUtil {
 	@Value("${brocels.app.jwtSecret}")
 	private String jwtSecret;
 	
-	@Value("${brocels.app.jwtExpirationMs")
+	@Value("${brocels.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
 	
 	public String generateJwtToken(Authentication authentication) {

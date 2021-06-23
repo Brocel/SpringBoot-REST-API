@@ -6,7 +6,7 @@
   },
   {
     "name": "brocels.app.jwtExpirationMs",
-    "type": "java.lang.String",
+    "type": "java.lang.int",
     "description": "A description for 'brocels.app.jwtExpirationMs'"
   }
 ]}
