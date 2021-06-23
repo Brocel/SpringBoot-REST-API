@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.brocels.springboot.backend.service.CustomUserDetailsService;
+import com.brocels.springboot.backend.service.UserDetailsServiceImpl;
 import com.brocels.springboot.backend.util.JwtFilter;
 
 @Configuration
@@ -25,7 +25,7 @@ import com.brocels.springboot.backend.util.JwtFilter;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private UserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

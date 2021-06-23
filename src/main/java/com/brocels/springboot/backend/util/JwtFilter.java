@@ -7,15 +7,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.brocels.springboot.backend.service.CustomUserDetailsService;
+import com.brocels.springboot.backend.service.UserDetailsServiceImpl;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter{
@@ -25,36 +28,40 @@ public class JwtFilter extends OncePerRequestFilter{
     private JwtUtil jwtUtil;
 	
     @Autowired
-    private CustomUserDetailsService service;
+    private UserDetailsServiceImpl service;
     
-	@Override
-	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+    
+    @Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		String authorizationHeader = httpServletRequest.getHeader("Authorization");
-		String token = null;
-        String userName = null;
-        
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7);
-            userName = jwtUtil.extractUsername(token);
-        }
-        
-        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		try {
+			String jwt = parseJwt(request);
+			if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
+				String username = jwtUtil.getUserNameFromJwtToken(jwt);
 
-            UserDetails userDetails = service.loadUserByUsername(userName);
+				UserDetails userDetails = service.loadUserByUsername(username);
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            if (jwtUtil.validateToken(token, userDetails)) {
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		} catch (Exception e) {
+			logger.error("Cannot set user authentication: {}", e);
+		}
 
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken
-                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }
-        }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
-		
+		filterChain.doFilter(request, response);
+	}
+    
+    private String parseJwt(HttpServletRequest request) {
+		String headerAuth = request.getHeader("Authorization");
+
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+			return headerAuth.substring(7, headerAuth.length());
+		}
+
+		return null;
 	}
 
 }
