@@ -2,6 +2,8 @@ package com.brocels.springboot.backend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +92,7 @@ public class UserJPAUnitTest {
 		User user3 = new User("TestFirstName3", "TestLastName3", "TestUserName3","TestEmail3@test.com", 33, "TestCountry3", "TestState3", "TestCity3", "TestPassword3");
 		entityManager.persist(user3);
 		
-		User foundUser = repository.findByUserName("TestUserName2");
+		Optional<User> foundUser = repository.findByUserName("TestUserName2");
 		
 		assertThat(foundUser).isEqualTo(user2);
 	
