@@ -1,15 +1,13 @@
 package com.brocels.springboot.backend.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(
@@ -22,17 +20,21 @@ public class User {
     private long id;
 
     @Column(name = "first_name")
+    @Size(max=20)
     private String firstName;
 
     @Column(name = "last_name")
+    @Size(max=20)
     private String lastName;
     
     @Column(name = "user_name")
+    @Size(max=20)
     @NotBlank
     private String userName;
     
     @Column(name = "email")
     @NotBlank
+    @Size(max = 50)
     @Email(message = "Email should be valid")
     private String email;
     
@@ -51,7 +53,15 @@ public class User {
     
     @Column(name = "password")
     @NotBlank
+    @Size(max = 120)
     private String password;
+    
+    @Column
+    @ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_roles", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
     public User() {
 
@@ -150,5 +160,15 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	
+	
     
 }
